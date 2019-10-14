@@ -23,7 +23,8 @@ async def on_message(message):
     res = diceroll.Dice.roll_with_pattern(message_reg.group(1))
 
     send_msg = message.author.mention + "\n"
-    send_msg += "Dice rolled for \"*" + message_reg.group(4).strip() + "*\"\n"
+    if(message_reg.group(4)!=""):
+      send_msg += "Dice rolled for \"*" + message_reg.group(4).strip() + "*\"\n"
     send_msg += "res: " + str(res) + "-> __**" + str(sum(res)) + "**__\n"
 
     print(send_msg)
