@@ -25,7 +25,7 @@ class Dice:
         int( reg.group(2) )
       )
     else:
-      []
+      pass
 
   @classmethod
   def roll_once(cls, num):

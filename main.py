@@ -3,6 +3,8 @@ import re
 import random
 import os
 
+import diceroll
+
 client = discord.Client()
 
 pattern = re.compile(r'(\d)[dD](\d+)(.*)')
@@ -29,17 +31,24 @@ async def on_message(message):
     await client.send_message(message.channel, msg)
     return
 
-  reg = pattern.search(message.content)
-  if reg:
-    num1 = int( reg.group(1) )
-    num2 = int( reg.group(2) )
-    str1 = str( reg.group(3) )
-    res = dice_roll(num1, num2)
+  # reg = pattern.search(message.content)
+  # if reg:
+  #   num1 = int( reg.group(1) )
+  #   num2 = int( reg.group(2) )
+  #   str1 = str( reg.group(3) )
+  #   res = dice_roll(num1, num2)
 
-    msg = message.author.mention + " " + str(res)
-    if str1.find("シークレット")==-1:
-      await client.send_message(message.channel, msg)
-    else:
-      await client.send_message(message.author, msg)
+  #   msg = message.author.mention + " " + str(res)
+  #   if str1.find("シークレット")==-1:
+  #     await client.send_message(message.channel, msg)
+  #   else:
+  #     await client.send_message(message.author, msg)
+
+  res = diceroll.Dice.roll_with_pattern(message.content)
+  if(res):
+    await client.send_message(
+      message.channel,
+      str(res)
+    )
 
 client.run(os.environ['DISCRD_TOKEN'])
