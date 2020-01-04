@@ -4,10 +4,13 @@ import random
 import os
 
 import diceroll
+import diceparse
 
 client = discord.Client()
 
 pattern = re.compile(r'((\d)[dD](\d+))(.*)')
+
+parser_pattern = re.compile(r'^\d+[dD][\ddD\+\-\*]*\d+')
 
 @client.event
 async def on_ready():
@@ -17,6 +20,11 @@ async def on_ready():
 async def on_message(message):
   if message.content == '!bye':
     await client.close()
+
+  dice_parser_reg = parser_pattern.search(message.content)
+  if dice_parser_reg:
+    msg = diceparse.DiceParser(dice_parser_reg.group(0)).evaluate()
+    await client.send_message(message.channel, str(msg))
 
   message_reg = pattern.search(message.content)
   if(message_reg):
