@@ -10,7 +10,7 @@ client = discord.Client()
 
 pattern = re.compile(r'((\d)[dD](\d+))(.*)')
 
-parser_pattern = re.compile(r'^\(?\d+[dD][\ddD\(\)\+\-\*]*\d+(.*)')
+parser_pattern = re.compile(r'^\(?\d+[dD][\ddD\(\)\+\-\*]*\d+\)?(.*)')
 
 @client.event
 async def on_ready():
