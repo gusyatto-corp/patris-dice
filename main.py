@@ -10,7 +10,7 @@ client = discord.Client()
 
 pattern = re.compile(r'((\d)[dD](\d+))(.*)')
 
-parser_pattern = re.compile(r'^\d+[dD][\ddD\+\-\*]*\d+')
+parser_pattern = re.compile(r'^\d+[dD][\ddD\+\-\*]*\d+(.*)')
 
 @client.event
 async def on_ready():
@@ -23,8 +23,15 @@ async def on_message(message):
 
   dice_parser_reg = parser_pattern.search(message.content)
   if dice_parser_reg:
-    msg = diceparse.DiceParser(dice_parser_reg.group(0)).evaluate()
-    await client.send_message(message.channel, str(msg))
+    msg = message.author.mention + "\n"
+    msg += str(diceparse.DiceParser(dice_parser_reg.group(0)).evaluate())
+    
+    if dice_parser_reg.group(1).find("シークレット"):
+      await client.send_message(message.author, msg)
+      return
+    
+    await client.send_message(message.channel, msg)
+    return
 
   message_reg = pattern.search(message.content)
   if(message_reg):
