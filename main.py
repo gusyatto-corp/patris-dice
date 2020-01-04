@@ -26,7 +26,7 @@ async def on_message(message):
     msg = message.author.mention + "\n"
     msg += str(diceparse.DiceParser(dice_parser_reg.group(0)).evaluate())
     
-    if dice_parser_reg.group(1).find("シークレット"):
+    if dice_parser_reg.group(1).find("シークレット")!=-1:
       await client.send_message(message.author, msg)
       return
     
