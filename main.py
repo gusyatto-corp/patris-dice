@@ -2,6 +2,8 @@ import discord
 import re
 import random
 import os
+import urllib.request
+import json
 
 import diceroll
 import diceparse
@@ -12,6 +14,13 @@ pattern = re.compile(r'((\d)[dD](\d+))(.*)')
 
 parser_pattern = re.compile(r'^\(?\d+[dD][\ddD\(\)\+\-\*]*\d+\)?(.*)')
 
+def getLiveDataList():
+  url = 'http://holodule-now-server.herokuapp.com/api/schedule/now'
+  res = urllib.request.urlopen(url=url).read()
+  live_datas = json.loads(res.decode('utf-8'))
+  return live_datas
+
+
 @client.event
 async def on_ready():
   print('Logged in.')
@@ -20,6 +29,19 @@ async def on_ready():
 async def on_message(message):
   if message.content == '!bye':
     await client.close()
+
+  if message.content == 'ホロライブの配信見たいな':
+    await client.send_message(message.channel, (message.author.mention)+'\nなんだと？')
+    datas = getLiveDataList()
+    if len(datas)==0:
+      await client.send_message(message.channel, 'しかし残念だが、今は誰も配信していないようだ...')
+      return
+    
+    await client.send_message(message.channel, 'ならばこちらの配信はいかがだろうか')
+    for d in datas:
+      await client.send_message(message.channel, d['streaming']['url'])
+    await client.send_message(message.channel, 'スパチャの準備はできたか？')
+    return 
 
   dice_parser_reg = parser_pattern.search(message.content)
   if dice_parser_reg:
