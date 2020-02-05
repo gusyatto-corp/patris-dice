@@ -16,6 +16,8 @@ pattern = re.compile(r'((\d)[dD](\d+))(.*)')
 
 parser_pattern = re.compile(r'^\(?\d+[dD][\ddD\(\)\+\-\*]*\d+\)?(.*)')
 
+reaction_pattern = ['それな', 'わかる', '本当か？', 'おちつけよ', 'キウイ食うか？', '確かに', '爆弾発言だな(笑)']
+
 def getLiveDataList():
   url = 'http://holodule-now-server.herokuapp.com/api/schedule/now'
   res = urllib.request.urlopen(url=url).read()
@@ -31,6 +33,12 @@ async def on_ready():
 async def on_message(message):
   if message.content == '!bye':
     await client.close()
+
+  if message.author.bot:
+    return 
+
+  if random.randrange(0,100)<1:
+    await client.send_message(message.channel, message.author.mention + " " + random.choice(reaction_pattern))
 
   if message.content == 'ホロライブの配信見たいな':
     await client.send_message(message.channel, (message.author.mention)+'\nなんだと？')
