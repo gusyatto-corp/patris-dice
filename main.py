@@ -4,6 +4,8 @@ import random
 import os
 import urllib.request
 import json
+import time,asyncio
+import threading
 
 import diceroll
 import diceparse
@@ -75,5 +77,13 @@ async def on_message(message):
 
     await client.send_message(send_for, send_msg)
 
+def holodule_job():
+  print(getLiveDataList())
+  t=threading.Timer(300,holodule_job)
+  t.start()
+
+t=threading.Thread(target=holodule_job)
+t.start()
 
 client.run(os.environ['DISCRD_TOKEN'])
+
