@@ -37,9 +37,6 @@ async def on_message(message):
   if message.author.bot:
     return 
 
-  if random.randrange(0,100)<1:
-    await client.send_message(message.channel, message.author.mention + " " + random.choice(reaction_pattern))
-
   if message.content == 'ホロライブの配信見たいな':
     await client.send_message(message.channel, (message.author.mention)+'\nなんだと？')
     datas = getLiveDataList()
@@ -84,6 +81,11 @@ async def on_message(message):
     print(send_msg)
 
     await client.send_message(send_for, send_msg)
+    return 
+    
+  if random.randrange(0,100)<1:
+    await client.send_message(message.channel, message.author.mention + " " + random.choice(reaction_pattern))
+
 
 def holodule_job():
   print(getLiveDataList())
