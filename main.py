@@ -84,12 +84,10 @@ async def on_message(message):
       await message.channel.send(send_msg)
 
     print(send_msg)
-
-    await client.send_message(send_for, send_msg)
     return 
     
   if random.randrange(0,100)<1:
-    await client.send_message(message.channel, message.author.mention + " " + random.choice(reaction_pattern))
+    await message.channel.send(message.author.mention + " " + random.choice(reaction_pattern))
 
 
 def holodule_job():
