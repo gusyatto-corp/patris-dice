@@ -37,17 +37,20 @@ async def on_message(message):
   if message.author.bot:
     return 
 
+  if random.randrange(0,100)<1:
+    await message.channel.send( message.author.mention + " " + random.choice(reaction_pattern))
+
   if message.content == 'ホロライブの配信見たいな':
-    await client.send_message(message.channel, (message.author.mention)+'\nなんだと？')
+    await message.channel.send( (message.author.mention)+'\nなんだと？')
     datas = getLiveDataList()
     if len(datas)==0:
-      await client.send_message(message.channel, 'しかし残念だが、今は誰も配信していないようだ...')
+      await message.channel.send( 'しかし残念だが、今は誰も配信していないようだ...')
       return
     
-    await client.send_message(message.channel, 'ならばこちらの配信はいかがだろうか')
+    await message.channel.send( 'ならばこちらの配信はいかがだろうか')
     for d in datas:
-      await client.send_message(message.channel, d['streaming']['url'])
-    await client.send_message(message.channel, 'スパチャの準備はできたか？')
+      await message.channel.send( d['streaming']['url'])
+    await message.channel.send( 'スパチャの準備はできたか？')
     return 
 
   dice_parser_reg = parser_pattern.search(message.content)
@@ -56,10 +59,10 @@ async def on_message(message):
     msg += str(diceparse.DiceParser(dice_parser_reg.group(0)).evaluate())
     
     if dice_parser_reg.group(1).find("シークレット")!=-1:
-      await client.send_message(message.author, msg)
+      await message.author.send(msg)
       return
     
-    await client.send_message(message.channel, msg)
+    await message.channel.send( msg)
     return
 
   message_reg = pattern.search(message.content)
@@ -76,7 +79,9 @@ async def on_message(message):
     send_for = message.channel
     if(message_reg.group(4).find("シークレット") != -1):
       send_msg.replace("シークレット", "")
-      send_for = message.author
+      await message.author.send(send_msg)
+    else:
+      await message.channel.send(send_msg)
 
     print(send_msg)
 
